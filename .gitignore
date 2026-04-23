@@ -1,0 +1,125 @@
+# =========================
+
+# 🔐 Terraform
+
+# =========================
+
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraform.lock.hcl
+
+# Sensitive variable files
+
+*.tfvars
+*.tfvars.json
+secrets.tfvars
+
+# =========================
+
+# 🐳 Docker
+
+# =========================
+
+Dockerfile.local
+docker-compose.override.yml
+*.tar
+
+# =========================
+
+# 🔐 Environment Variables
+
+# =========================
+
+.env
+.env.*
+!.env.example
+
+# =========================
+
+# 🟢 Node.js
+
+# =========================
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# =========================
+
+# 🐍 Python
+
+# =========================
+
+**pycache**/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+venv/
+.envrc
+
+# =========================
+
+# 🧪 Logs & Temp Files
+
+# =========================
+
+logs/
+*.log
+tmp/
+temp/
+
+# =========================
+
+# 💻 OS / IDE
+
+# =========================
+
+.DS_Store
+Thumbs.db
+
+# VS Code
+
+.vscode/
+
+# JetBrains
+
+.idea/
+
+# =========================
+
+# 🔐 AWS / Credentials
+
+# =========================
+
+.aws/
+credentials
+config
+
+# =========================
+
+# 📦 Build Artifacts
+
+# =========================
+
+dist/
+build/
+coverage/
+
+# =========================
+
+# 🔒 Security / Scan Reports
+
+# =========================
+
+*.sarif
+trivy-report.json
