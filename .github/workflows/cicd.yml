@@ -5,12 +5,6 @@ on:
     branches:
       - main
 
-env:
-  AWS_REGION: ap-south-1
-  ECR_REPOSITORY: two-tier-app-backend
-  ECS_CLUSTER: two-tier-app-cluster
-  ECS_SERVICE: two-tier-app-backend-service
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
