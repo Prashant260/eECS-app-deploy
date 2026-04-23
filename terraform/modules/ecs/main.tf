@@ -96,6 +96,56 @@ resource "aws_lb_listener" "listener" {
 }
 
 ############################
+# CLOUDWATCH LOG GROUP
+############################
+
+resource "aws_cloudwatch_log_group" "ecs_backend" {
+  name              = "/ecs/${var.project_name}-backend"
+  retention_in_days = 30
+
+  tags = {
+    Name = "${var.project_name}-logs"
+  }
+}
+
+############################
+# CLOUDWATCH DASHBOARD
+############################
+
+resource "aws_cloudwatch_dashboard" "ecs_dashboard" {
+  dashboard_name = "${var.project_name}-dashboard"
+
+  dashboard_body = jsonencode({
+    widgets = [
+      {
+        type = "metric"
+        properties = {
+          metrics = [
+            ["AWS/ECS", "CPUUtilization", { stat = "Average" }],
+            [".", "MemoryUtilization", { stat = "Average" }],
+            ["AWS/ApplicationELB", "TargetResponseTime", { stat = "Average" }],
+            [".", "RequestCount", { stat = "Sum" }]
+          ]
+          period = 60
+          stat   = "Average"
+          region = "ap-south-1"
+          title  = "ECS & ALB Metrics"
+        }
+      },
+      {
+        type = "log"
+        properties = {
+          query   = "fields @timestamp, @message | stats count() by @message"
+          region  = "ap-south-1"
+          title   = "Application Logs"
+          queryId = "${var.project_name}-logs"
+        }
+      }
+    ]
+  })
+}
+
+############################
 # TASK DEFINITION
 ############################
 
@@ -118,6 +168,15 @@ resource "aws_ecs_task_definition" "backend" {
           containerPort = 5000
         }
       ]
+
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = aws_cloudwatch_log_group.ecs_backend.name
+          awslogs-region        = "ap-south-1"
+          awslogs-stream-prefix = "backend"
+        }
+      }
     }
   ])
 }
