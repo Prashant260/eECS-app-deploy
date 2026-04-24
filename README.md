@@ -71,8 +71,7 @@ It includes:
 │
 ├── .github/
 │   └── workflows/
-│       ├── infra.yml       # Terraform pipeline
-│       └── deploy.yml      # App deployment pipeline
+│       ├──CICD.yml
 │
 ├── .gitignore
 └── README.md
