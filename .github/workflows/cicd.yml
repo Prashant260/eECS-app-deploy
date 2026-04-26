@@ -16,7 +16,7 @@ jobs:
     permissions:
       id-token: write
       contents: read
-  env:
+    env:
      ACTION: ${{ github.event.inputs.action || 'apply' }}
     steps:
       - name: Checkout code
