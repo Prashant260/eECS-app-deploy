@@ -1,9 +1,14 @@
-name: Deploy to ECS
-
 on:
   push:
     branches:
       - main
+
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "apply or destroy"
+        required: true
+        default: "apply"
 
 jobs:
   deploy:
@@ -37,16 +42,22 @@ jobs:
         run: terraform plan
 
       - name: Terraform Apply
-        working-directory: ./terraform
+        if: env.ACTION == 'apply'
         run: terraform apply -auto-approve
+
+      - name: Terraform Destroy
+        if: env.ACTION == 'destroy'
+        run: terraform destroy -auto-approve
 
       # 🔑 Login to ECR
       - name: Login to Amazon ECR
+        if: env.ACTION == 'apply'
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
       # 🐳 Build and push image
       - name: Build and Push Docker Image
+        if: env.ACTION == 'apply'
         run: |
           docker build -t ${{ secrets.ECR_REPOSITORY }}:latest -f app/Dockerfile ./app
           docker tag ${{ secrets.ECR_REPOSITORY }}:latest ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
@@ -54,6 +65,7 @@ jobs:
 
       # 🚀 Deploy to ECS
       - name: Deploy to ECS
+        if: env.ACTION == 'apply'
         run: |
           aws ecs update-service \
             --cluster ${{ secrets.ECS_CLUSTER }} \
