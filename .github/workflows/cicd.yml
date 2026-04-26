@@ -38,6 +38,7 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
+        if: env.ACTION == 'apply'
         working-directory: ./terraform
         run: terraform plan
 
