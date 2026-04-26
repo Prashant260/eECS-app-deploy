@@ -50,6 +50,7 @@ jobs:
       - name: Terraform Destroy
         if: env.ACTION == 'destroy'
         run: terraform destroy -auto-approve
+        working-directory: ./terraform
 
       # 🔑 Login to ECR
       - name: Login to Amazon ECR
