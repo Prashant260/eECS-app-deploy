@@ -46,6 +46,7 @@ jobs:
       - name: Terraform Apply
         if: env.ACTION == 'apply'
         run: terraform apply -auto-approve
+        working-directory: ./terraform
 
       - name: Terraform Destroy
         if: env.ACTION == 'destroy'
